@@ -1,5 +1,3 @@
-import garageData from '@/data/garage.json';
-
 export type MaintenanceItem = {
     id: number;
     title: string;
@@ -51,35 +49,3 @@ export type GarageData = {
     serviceRecords: ServiceRecord[];
     researchSources: ResearchSource[];
 };
-
-export const garage = garageData as GarageData;
-export const vehicle = garage.vehicle;
-export const currentMileage = vehicle.currentMileage;
-export const maintenanceItems: MaintenanceItem[] = [...garage.maintenanceItems];
-export const serviceRecords = garage.serviceRecords;
-export const researchSources = garage.researchSources;
-
-export function createMaintenanceItem(input: {
-    title?: string;
-    dueMileage?: number;
-    estimatedCost?: number;
-}): MaintenanceItem | null {
-    const parsedDueMileage = Number(input.dueMileage);
-    const parsedEstimatedCost = Number(input.estimatedCost ?? 0);
-
-    if (!input.title?.trim() || !Number.isFinite(parsedDueMileage)) {
-        return null;
-    }
-
-    return {
-        id: Date.now(),
-        title: input.title.trim(),
-        category: 'Custom',
-        dueMileage: parsedDueMileage,
-        intervalMiles: 7500,
-        lastDoneMileage: currentMileage,
-        lastDoneDate: new Date().toISOString().slice(0, 10),
-        estimatedCost: Number.isFinite(parsedEstimatedCost) ? parsedEstimatedCost : 0,
-        notes: 'Added from quick entry.',
-    };
-}

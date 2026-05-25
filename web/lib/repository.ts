@@ -1,15 +1,10 @@
 import { Prisma } from '@prisma/client';
-import {
-    garage,
-    maintenanceItems as fallbackMaintenanceItems,
-    researchSources as fallbackResearchSources,
-    serviceRecords as fallbackServiceRecords,
-    vehicle as fallbackVehicle,
-    type GarageData,
-    type MaintenanceItem,
-    type ResearchSource,
-    type ServiceRecord,
-    type Vehicle,
+import type {
+    GarageData,
+    MaintenanceItem,
+    ResearchSource,
+    ServiceRecord,
+    Vehicle,
 } from '@/lib/maintenance';
 import { prisma } from '@/lib/prisma';
 
@@ -18,10 +13,6 @@ type MaintenanceInput = {
     dueMileage?: number;
     estimatedCost?: number;
 };
-
-function hasDatabaseUrl() {
-    return Boolean(process.env.DATABASE_URL);
-}
 
 function parseServices(value: Prisma.JsonValue): string[] {
     return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
@@ -116,16 +107,13 @@ async function getDatabaseGarage(): Promise<GarageData | null> {
 }
 
 export async function getGarage(): Promise<GarageData> {
-    if (!hasDatabaseUrl()) {
-        return garage;
+    const garage = await getDatabaseGarage();
+
+    if (!garage) {
+        throw new Error('Garage data not found. Ensure the database is seeded and contains a vehicle.');
     }
 
-    try {
-        return (await getDatabaseGarage()) ?? garage;
-    } catch (error) {
-        console.error('Falling back to seed data because the database query failed.', error);
-        return garage;
-    }
+    return garage;
 }
 
 export async function getMaintenanceItems(): Promise<MaintenanceItem[]> {
@@ -144,26 +132,23 @@ export async function createMaintenanceItem(input: MaintenanceInput): Promise<Ma
         return null;
     }
 
+    const dbVehicle = await prisma.vehicle.findFirst();
+
+    if (!dbVehicle) {
+        console.error('Unable to create maintenance item: no vehicle found.');
+        return null;
+    }
+
     const item = {
         title: input.title.trim(),
         category: 'Custom',
         dueMileage: parsedDueMileage,
         intervalMiles: 7500,
-        lastDoneMileage: fallbackVehicle.currentMileage,
+        lastDoneMileage: dbVehicle.currentMileage,
         lastDoneDate: new Date().toISOString().slice(0, 10),
         estimatedCost: Number.isFinite(parsedEstimatedCost) ? parsedEstimatedCost : 0,
         notes: 'Added from quick entry.',
     };
-
-    if (!hasDatabaseUrl()) {
-        const fallbackItem = {
-            id: Math.max(...fallbackMaintenanceItems.map((maintenanceItem) => maintenanceItem.id)) + 1,
-            ...item,
-        };
-
-        fallbackMaintenanceItems.push(fallbackItem);
-        return fallbackItem;
-    }
 
     try {
         return toMaintenanceItem(await prisma.maintenanceItem.create({ data: item }));
@@ -177,21 +162,6 @@ export async function updateMaintenanceItem(
     id: number,
     input: Partial<Pick<MaintenanceItem, 'dueMileage' | 'lastDoneDate' | 'lastDoneMileage'>>,
 ): Promise<MaintenanceItem | null> {
-    if (!hasDatabaseUrl()) {
-        const itemIndex = fallbackMaintenanceItems.findIndex((item) => item.id === id);
-
-        if (itemIndex < 0) {
-            return null;
-        }
-
-        fallbackMaintenanceItems[itemIndex] = {
-            ...fallbackMaintenanceItems[itemIndex],
-            ...input,
-        };
-
-        return fallbackMaintenanceItems[itemIndex];
-    }
-
     try {
         return toMaintenanceItem(await prisma.maintenanceItem.update({ where: { id }, data: input }));
     } catch (error) {
@@ -199,5 +169,3 @@ export async function updateMaintenanceItem(
         return null;
     }
 }
-
-export { fallbackResearchSources, fallbackServiceRecords };

@@ -12,15 +12,23 @@ import {
     Wrench,
 } from 'lucide-react';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import {
-    currentMileage,
-    maintenanceItems as initialItems,
-    serviceRecords as initialServiceRecords,
-    vehicle as initialVehicle,
-    type MaintenanceItem,
-    type ServiceRecord,
-    type Vehicle,
-} from '@/lib/maintenance';
+import type { MaintenanceItem, ServiceRecord, Vehicle } from '@/lib/maintenance';
+
+const emptyVehicle: Vehicle = {
+    year: 0,
+    make: '',
+    model: '',
+    series: '',
+    vin: '',
+    body: '',
+    engine: '',
+    fuel: '',
+    drive: '',
+    color: '',
+    currentMileage: 0,
+    currentMileageSource: '',
+    notes: [],
+};
 
 type Priority = 'overdue' | 'due-soon' | 'scheduled' | 'complete';
 
@@ -32,7 +40,7 @@ type GarageResponse = {
     serviceRecords: ServiceRecord[];
 };
 
-function getPriority(item: MaintenanceItem): Priority {
+function getPriority(item: MaintenanceItem, currentMileage: number): Priority {
     const remaining = item.dueMileage - currentMileage;
 
     if (remaining < 0) {
@@ -83,13 +91,15 @@ function formatRecordMileage(record: ServiceRecord) {
 }
 
 export default function Home() {
-    const [items, setItems] = useState<MaintenanceItem[]>(initialItems);
-    const [garageVehicle, setGarageVehicle] = useState<Vehicle>(initialVehicle);
-    const [records, setRecords] = useState<ServiceRecord[]>(initialServiceRecords);
+    const [items, setItems] = useState<MaintenanceItem[]>([]);
+    const [garageVehicle, setGarageVehicle] = useState<Vehicle>(emptyVehicle);
+    const [records, setRecords] = useState<ServiceRecord[]>([]);
     const [title, setTitle] = useState('');
     const [dueMileage, setDueMileage] = useState('');
     const [estimatedCost, setEstimatedCost] = useState('');
     const [filter, setFilter] = useState<'all' | Priority>('all');
+
+    const currentMileage = garageVehicle.currentMileage;
 
     useEffect(() => {
         async function loadGarage() {
@@ -124,13 +134,13 @@ export default function Home() {
 
     const filteredItems = useMemo(() => {
         return items
-            .filter((item) => filter === 'all' || getPriority(item) === filter)
+            .filter((item) => filter === 'all' || getPriority(item, currentMileage) === filter)
             .sort((a, b) => a.dueMileage - b.dueMileage);
-    }, [filter, items]);
+    }, [filter, items, currentMileage]);
 
-    const overdueCount = items.filter((item) => getPriority(item) === 'overdue').length;
-    const dueSoonCount = items.filter((item) => getPriority(item) === 'due-soon').length;
-    const nextItem = [...items].sort((a, b) => a.dueMileage - b.dueMileage)[0];
+    const overdueCount = items.filter((item) => getPriority(item, currentMileage) === 'overdue').length;
+    const dueSoonCount = items.filter((item) => getPriority(item, currentMileage) === 'due-soon').length;
+    const nextItem = items.length > 0 ? [...items].sort((a, b) => a.dueMileage - b.dueMileage)[0] : null;
     const latestRecords = [...records].sort((a, b) => b.date.localeCompare(a.date));
     const forecastCost = items
         .filter((item) => item.dueMileage - currentMileage <= 5000)
@@ -200,9 +210,9 @@ export default function Home() {
             existingItems.map((existingItem) =>
                 existingItem.id === item.id
                     ? {
-                          ...existingItem,
-                          ...updates,
-                      }
+                        ...existingItem,
+                        ...updates,
+                    }
                     : existingItem,
             ),
         );
@@ -273,7 +283,7 @@ export default function Home() {
                 <article className="metric">
                     <Gauge size={22} />
                     <span>Next service</span>
-                    <strong>{formatMileage(nextItem.dueMileage)} mi</strong>
+                    <strong>{nextItem ? `${formatMileage(nextItem.dueMileage)} mi` : 'N/A'}</strong>
                 </article>
                 <article className="metric">
                     <Activity size={22} />
@@ -349,7 +359,7 @@ export default function Home() {
 
                     <div className="items">
                         {filteredItems.map((item) => {
-                            const priority = getPriority(item);
+                            const priority = getPriority(item, currentMileage);
                             const milesRemaining = item.dueMileage - currentMileage;
 
                             return (
