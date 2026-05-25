@@ -1,0 +1,21 @@
+{
+    "name": "car-maintenance-tracker",
+    "version": "0.1.0",
+    "description": "BMW maintenance tracker web app",
+    "private": true,
+    "workspaces": [
+        "backend",
+        "web"
+    ],
+    "scripts": {
+        "dev": "npm run dev --workspaces",
+        "build": "npm run build --workspaces",
+        "test": "npm run test --workspaces",
+        "backend": "npm --workspace=backend",
+        "web": "npm --workspace=web"
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=9.0.0"
+    }
+}

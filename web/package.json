@@ -1,0 +1,35 @@
+{
+    "name": "car-maintenance-tracker-web",
+    "version": "0.1.0",
+    "description": "Next.js dashboard for car maintenance tracker",
+    "private": true,
+    "scripts": {
+        "dev": "next dev -p 3000",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "test": "jest"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "next": "^13.4.0",
+        "typescript": "^5.1.0",
+        "@types/react": "^18.2.0",
+        "@types/react-dom": "^18.2.0",
+        "@types/node": "^20.0.0",
+        "axios": "^1.4.0",
+        "zustand": "^4.3.0",
+        "lucide-react": "^0.263.0",
+        "date-fns": "^2.30.0"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.0",
+        "eslint": "^8.40.0",
+        "eslint-config-next": "^13.4.0",
+        "jest": "^29.5.0",
+        "ts-jest": "^29.1.0",
+        "@testing-library/react": "^14.0.0",
+        "@testing-library/jest-dom": "^6.0.0"
+    }
+}
