@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  vin                  String   @id
+  year                 Int
+  make                 String
+  model                String
+  series               String
+  body                 String
+  engine               String
+  fuel                 String
+  drive                String
+  color                String
+  currentMileage       Int
+  currentMileageSource String
+  notes                Json
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model MaintenanceItem {
+  id              Int      @id @default(autoincrement())
+  title           String
+  category        String
+  dueMileage      Int
+  intervalMiles   Int
+  lastDoneMileage Int
+  lastDoneDate    String
+  estimatedCost   Int
+  notes           String
+  source          String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ServiceRecord {
+  id        String   @id
+  date      String
+  mileage   Int?
+  provider  String
+  location  String
+  services  Json
+  source    String
+  flag      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ResearchSource {
+  id        String   @id
+  label     String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

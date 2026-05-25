@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server';
-import { maintenanceItems, researchSources, serviceRecords, vehicle } from '@/lib/maintenance';
+import { getGarage } from '@/lib/repository';
 
-export function GET() {
-    return NextResponse.json({
-        vehicle,
-        maintenanceItems,
-        serviceRecords,
-        researchSources,
-    });
+export const dynamic = 'force-dynamic';
+
+export async function GET() {
+    return NextResponse.json(await getGarage());
 }

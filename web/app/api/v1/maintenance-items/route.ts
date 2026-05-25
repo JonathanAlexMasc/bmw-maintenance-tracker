@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
-import { createMaintenanceItem, maintenanceItems } from '@/lib/maintenance';
+import { createMaintenanceItem, getMaintenanceItems } from '@/lib/repository';
 
-export function GET() {
-    return NextResponse.json({ maintenanceItems });
+export const dynamic = 'force-dynamic';
+
+export async function GET() {
+    return NextResponse.json({ maintenanceItems: await getMaintenanceItems() });
 }
 
 export async function POST(request: Request) {
-    const item = createMaintenanceItem(await request.json());
+    const item = await createMaintenanceItem(await request.json());
 
     if (!item) {
         return NextResponse.json(
@@ -15,6 +17,5 @@ export async function POST(request: Request) {
         );
     }
 
-    maintenanceItems.push(item);
     return NextResponse.json(item, { status: 201 });
 }

@@ -15,15 +15,22 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import {
     currentMileage,
     maintenanceItems as initialItems,
-    serviceRecords,
-    vehicle,
+    serviceRecords as initialServiceRecords,
+    vehicle as initialVehicle,
     type MaintenanceItem,
     type ServiceRecord,
+    type Vehicle,
 } from '@/lib/maintenance';
 
 type Priority = 'overdue' | 'due-soon' | 'scheduled' | 'complete';
 
 const storageKey = 'bmw-325i-maintenance-items-v2';
+
+type GarageResponse = {
+    vehicle: Vehicle;
+    maintenanceItems: MaintenanceItem[];
+    serviceRecords: ServiceRecord[];
+};
 
 function getPriority(item: MaintenanceItem): Priority {
     const remaining = item.dueMileage - currentMileage;
@@ -77,12 +84,33 @@ function formatRecordMileage(record: ServiceRecord) {
 
 export default function Home() {
     const [items, setItems] = useState<MaintenanceItem[]>(initialItems);
+    const [garageVehicle, setGarageVehicle] = useState<Vehicle>(initialVehicle);
+    const [records, setRecords] = useState<ServiceRecord[]>(initialServiceRecords);
     const [title, setTitle] = useState('');
     const [dueMileage, setDueMileage] = useState('');
     const [estimatedCost, setEstimatedCost] = useState('');
     const [filter, setFilter] = useState<'all' | Priority>('all');
 
     useEffect(() => {
+        async function loadGarage() {
+            try {
+                const response = await fetch('/api/v1/garage');
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const data = (await response.json()) as GarageResponse;
+                setGarageVehicle(data.vehicle);
+                setItems(data.maintenanceItems);
+                setRecords(data.serviceRecords);
+            } catch {
+                // The bundled seed data keeps the app usable before a database is connected.
+            }
+        }
+
+        void loadGarage();
+
         const savedItems = window.localStorage.getItem(storageKey);
 
         if (savedItems) {
@@ -103,12 +131,12 @@ export default function Home() {
     const overdueCount = items.filter((item) => getPriority(item) === 'overdue').length;
     const dueSoonCount = items.filter((item) => getPriority(item) === 'due-soon').length;
     const nextItem = [...items].sort((a, b) => a.dueMileage - b.dueMileage)[0];
-    const latestRecords = [...serviceRecords].sort((a, b) => b.date.localeCompare(a.date));
+    const latestRecords = [...records].sort((a, b) => b.date.localeCompare(a.date));
     const forecastCost = items
         .filter((item) => item.dueMileage - currentMileage <= 5000)
         .reduce((total, item) => total + item.estimatedCost, 0);
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         const parsedMileage = Number(dueMileage);
@@ -118,40 +146,87 @@ export default function Home() {
             return;
         }
 
-        setItems((existingItems) => [
-            ...existingItems,
-            {
-                id: Date.now(),
-                title: title.trim(),
-                category: 'Custom',
-                dueMileage: parsedMileage,
-                intervalMiles: 0,
-                lastDoneMileage: currentMileage,
-                lastDoneDate: new Date().toISOString().slice(0, 10),
-                estimatedCost: Number.isFinite(parsedCost) ? parsedCost : 0,
-                notes: 'Added from quick entry.',
-            },
-        ]);
+        const pendingItem = {
+            id: Date.now(),
+            title: title.trim(),
+            category: 'Custom',
+            dueMileage: parsedMileage,
+            intervalMiles: 0,
+            lastDoneMileage: currentMileage,
+            lastDoneDate: new Date().toISOString().slice(0, 10),
+            estimatedCost: Number.isFinite(parsedCost) ? parsedCost : 0,
+            notes: 'Added from quick entry.',
+        };
+
+        setItems((existingItems) => [...existingItems, pendingItem]);
         setTitle('');
         setDueMileage('');
         setEstimatedCost('');
+
+        try {
+            const response = await fetch('/api/v1/maintenance-items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: title.trim(),
+                    dueMileage: parsedMileage,
+                    estimatedCost: Number.isFinite(parsedCost) ? parsedCost : 0,
+                }),
+            });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const savedItem = (await response.json()) as MaintenanceItem;
+            setItems((existingItems) =>
+                existingItems.map((existingItem) =>
+                    existingItem.id === pendingItem.id ? savedItem : existingItem,
+                ),
+            );
+        } catch {
+            // Keep the optimistic local item if the database/API is not reachable.
+        }
     }
 
-    function markDone(item: MaintenanceItem) {
+    async function markDone(item: MaintenanceItem) {
+        const updates = {
+            lastDoneMileage: currentMileage,
+            lastDoneDate: new Date().toISOString().slice(0, 10),
+            dueMileage: currentMileage + (item.intervalMiles > 0 ? item.intervalMiles : 7500),
+        };
+
         setItems((existingItems) =>
             existingItems.map((existingItem) =>
                 existingItem.id === item.id
                     ? {
                           ...existingItem,
-                          lastDoneMileage: currentMileage,
-                          lastDoneDate: new Date().toISOString().slice(0, 10),
-                          dueMileage:
-                              currentMileage +
-                              (existingItem.intervalMiles > 0 ? existingItem.intervalMiles : 7500),
+                          ...updates,
                       }
                     : existingItem,
             ),
         );
+
+        try {
+            const response = await fetch(`/api/v1/maintenance-items/${item.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updates),
+            });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const savedItem = (await response.json()) as MaintenanceItem;
+            setItems((existingItems) =>
+                existingItems.map((existingItem) =>
+                    existingItem.id === item.id ? savedItem : existingItem,
+                ),
+            );
+        } catch {
+            // Keep the optimistic local update if the database/API is not reachable.
+        }
     }
 
     return (
@@ -162,18 +237,18 @@ export default function Home() {
                         <Car size={18} />
                         BMW garage
                     </div>
-                    <h1>{vehicle.year} BMW {vehicle.model}</h1>
+                    <h1>{garageVehicle.year} BMW {garageVehicle.model}</h1>
                     <p>
-                        Maintenance plan and service history for your {vehicle.series}, built from
+                        Maintenance plan and service history for your {garageVehicle.series}, built from
                         your CARFAX report, recent Downtown Automotive records, and researched
                         service intervals.
                     </p>
                 </div>
                 <div className="vehicle-card" aria-label="Vehicle summary">
                     <div>
-                        <span>{vehicle.engine} · {vehicle.drive}</span>
+                        <span>{garageVehicle.engine} · {garageVehicle.drive}</span>
                         <strong>{formatMileage(currentMileage)} mi</strong>
-                        <small>{vehicle.vin}</small>
+                        <small>{garageVehicle.vin}</small>
                     </div>
                     <div className="vehicle-visual">
                         <div className="car-roof" />
@@ -327,7 +402,7 @@ export default function Home() {
                         </span>
                         <h2>Service history</h2>
                     </div>
-                    <p>{serviceRecords.length} records from CARFAX and your screenshots</p>
+                    <p>{records.length} records from CARFAX and your screenshots</p>
                 </div>
 
                 <div className="history-list">

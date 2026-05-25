@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import { serviceRecords } from '@/lib/maintenance';
+import { getServiceRecords } from '@/lib/repository';
 
-export function GET() {
-    return NextResponse.json({ serviceRecords });
+export const dynamic = 'force-dynamic';
+
+export async function GET() {
+    return NextResponse.json({ serviceRecords: await getServiceRecords() });
 }

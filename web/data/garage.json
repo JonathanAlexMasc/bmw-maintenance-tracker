@@ -14,6 +14,7 @@
         "currentMileageSource": "04/24/2026 Downtown Automotive record",
         "notes": [
             "CARFAX reported 155,452 miles on 03/12/2026.",
+            "03/22/2026 APX Auto Brokers record shows 155,664 miles.",
             "04/24/2026 Downtown Automotive record shows 155,843 miles.",
             "05/08/2026 Downtown Automotive record shows 86,271 miles and is flagged as a mileage inconsistency."
         ]
@@ -23,13 +24,13 @@
             "id": 1,
             "title": "Engine oil and filter",
             "category": "Engine",
-            "dueMileage": 162494,
+            "dueMileage": 163164,
             "intervalMiles": 7500,
-            "lastDoneMileage": 154994,
-            "lastDoneDate": "2025-08-23",
+            "lastDoneMileage": 155664,
+            "lastDoneDate": "2026-03-22",
             "estimatedCost": 150,
-            "notes": "BMW CBS tracks oil condition; for an older N52, use at least annual oil service even if mileage is low.",
-            "source": "CARFAX oil service plus BMW CBS/Haynes annual oil guidance"
+            "notes": "BMW CBS tracks oil condition; APX Auto Brokers changed the oil/filter on 03/22/2026. For an older N52, use at least annual oil service even if mileage is low.",
+            "source": "APX Auto Brokers screenshot plus BMW CBS/Haynes annual oil guidance"
         },
         {
             "id": 2,
@@ -363,6 +364,15 @@
             "location": "Seattle, WA",
             "services": ["Maintenance inspection completed", "Fluids checked", "Front strut(s) replaced", "Oil and filter changed", "Tire condition and pressure checked"],
             "source": "CARFAX PDF"
+        },
+        {
+            "id": "2026-03-22-apx-auto-brokers",
+            "date": "2026-03-22",
+            "mileage": 155664,
+            "provider": "Apx Auto Brokers",
+            "location": "Washington",
+            "services": ["Safety inspection performed", "Oil and filter changed"],
+            "source": "IMG_1547.jpg"
         },
         {
             "id": "2026-04-24-downtown",
