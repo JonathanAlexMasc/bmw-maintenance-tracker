@@ -6,87 +6,24 @@ import {
     CalendarClock,
     Car,
     CheckCircle2,
+    ClipboardList,
     Gauge,
     Plus,
     Wrench,
 } from 'lucide-react';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
+import {
+    currentMileage,
+    maintenanceItems as initialItems,
+    serviceRecords,
+    vehicle,
+    type MaintenanceItem,
+    type ServiceRecord,
+} from '@/lib/maintenance';
 
 type Priority = 'overdue' | 'due-soon' | 'scheduled' | 'complete';
 
-type MaintenanceItem = {
-    id: number;
-    title: string;
-    category: string;
-    dueMileage: number;
-    intervalMiles: number;
-    lastDoneMileage: number;
-    lastDoneDate: string;
-    estimatedCost: number;
-    notes: string;
-};
-
-const currentMileage = 68420;
-
-const initialItems: MaintenanceItem[] = [
-    {
-        id: 1,
-        title: 'Engine oil and filter',
-        category: 'Drivetrain',
-        dueMileage: 69500,
-        intervalMiles: 7500,
-        lastDoneMileage: 62000,
-        lastDoneDate: '2025-11-12',
-        estimatedCost: 145,
-        notes: 'Use BMW LL-01 5W-30 and inspect for leaks.',
-    },
-    {
-        id: 2,
-        title: 'Brake fluid flush',
-        category: 'Brakes',
-        dueMileage: 68200,
-        intervalMiles: 24000,
-        lastDoneMileage: 44200,
-        lastDoneDate: '2024-04-20',
-        estimatedCost: 185,
-        notes: 'Two-year service item. Check pedal feel after bleed.',
-    },
-    {
-        id: 3,
-        title: 'Cabin microfilter',
-        category: 'Comfort',
-        dueMileage: 71000,
-        intervalMiles: 15000,
-        lastDoneMileage: 56000,
-        lastDoneDate: '2025-06-04',
-        estimatedCost: 75,
-        notes: 'Charcoal filter preferred before summer.',
-    },
-    {
-        id: 4,
-        title: 'Spark plugs',
-        category: 'Ignition',
-        dueMileage: 80000,
-        intervalMiles: 60000,
-        lastDoneMileage: 20000,
-        lastDoneDate: '2022-08-16',
-        estimatedCost: 320,
-        notes: 'Replace coils only if misfires are present.',
-    },
-    {
-        id: 5,
-        title: 'Tire rotation and balance',
-        category: 'Chassis',
-        dueMileage: 69000,
-        intervalMiles: 6000,
-        lastDoneMileage: 63000,
-        lastDoneDate: '2026-01-09',
-        estimatedCost: 95,
-        notes: 'Measure tread depth and note any inner-edge wear.',
-    },
-];
-
-const storageKey = 'bmw-maintenance-items-v1';
+const storageKey = 'bmw-325i-maintenance-items-v2';
 
 function getPriority(item: MaintenanceItem): Priority {
     const remaining = item.dueMileage - currentMileage;
@@ -125,6 +62,19 @@ function formatCurrency(value: number) {
     }).format(value);
 }
 
+function formatDate(value: string) {
+    return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'UTC',
+    }).format(new Date(`${value}T00:00:00.000Z`));
+}
+
+function formatRecordMileage(record: ServiceRecord) {
+    return typeof record.mileage === 'number' ? `${formatMileage(record.mileage)} mi` : 'Mileage not listed';
+}
+
 export default function Home() {
     const [items, setItems] = useState<MaintenanceItem[]>(initialItems);
     const [title, setTitle] = useState('');
@@ -153,6 +103,7 @@ export default function Home() {
     const overdueCount = items.filter((item) => getPriority(item) === 'overdue').length;
     const dueSoonCount = items.filter((item) => getPriority(item) === 'due-soon').length;
     const nextItem = [...items].sort((a, b) => a.dueMileage - b.dueMileage)[0];
+    const latestRecords = [...serviceRecords].sort((a, b) => b.date.localeCompare(a.date));
     const forecastCost = items
         .filter((item) => item.dueMileage - currentMileage <= 5000)
         .reduce((total, item) => total + item.estimatedCost, 0);
@@ -211,16 +162,18 @@ export default function Home() {
                         <Car size={18} />
                         BMW garage
                     </div>
-                    <h1>Maintenance cockpit for your BMW</h1>
+                    <h1>{vehicle.year} BMW {vehicle.model}</h1>
                     <p>
-                        Track what is due, what was done, and what your next service visit is likely
-                        to cost.
+                        Maintenance plan and service history for your {vehicle.series}, built from
+                        your CARFAX report, recent Downtown Automotive records, and researched
+                        service intervals.
                     </p>
                 </div>
                 <div className="vehicle-card" aria-label="Vehicle summary">
                     <div>
-                        <span>2018 BMW 340i xDrive</span>
+                        <span>{vehicle.engine} · {vehicle.drive}</span>
                         <strong>{formatMileage(currentMileage)} mi</strong>
+                        <small>{vehicle.vin}</small>
                     </div>
                     <div className="vehicle-visual">
                         <div className="car-roof" />
@@ -296,8 +249,8 @@ export default function Home() {
                     <div className="service-note">
                         <Wrench size={20} />
                         <p>
-                            BMW CBS reminders are useful, but this tracker keeps wear items,
-                            owner-preferred intervals, and receipts in one place.
+                            Current mileage is based on the 04/24/2026 Downtown Automotive record.
+                            The 05/08/2026 record is kept but flagged because it reports 86,271 miles.
                         </p>
                     </div>
                 </aside>
@@ -363,6 +316,49 @@ export default function Home() {
                         })}
                     </div>
                 </section>
+            </section>
+
+            <section className="history-section" aria-label="Service history">
+                <div className="history-heading">
+                    <div>
+                        <span className="eyebrow compact">
+                            <ClipboardList size={18} />
+                            Records database
+                        </span>
+                        <h2>Service history</h2>
+                    </div>
+                    <p>{serviceRecords.length} records from CARFAX and your screenshots</p>
+                </div>
+
+                <div className="history-list">
+                    {latestRecords.map((record) => (
+                        <article className={`history-card ${record.flag ?? ''}`} key={record.id}>
+                            <div className="history-topline">
+                                <div>
+                                    <h3>{record.provider}</h3>
+                                    <span>{record.location}</span>
+                                </div>
+                                <div className="history-date">
+                                    <strong>{formatDate(record.date)}</strong>
+                                    <span>{formatRecordMileage(record)}</span>
+                                </div>
+                            </div>
+                            {record.flag ? (
+                                <span className={`record-flag ${record.flag}`}>
+                                    {record.flag === 'mileage_inconsistency'
+                                        ? 'Mileage inconsistency'
+                                        : 'Damage report'}
+                                </span>
+                            ) : null}
+                            <ul>
+                                {record.services.map((service) => (
+                                    <li key={service}>{service}</li>
+                                ))}
+                            </ul>
+                            <span className="record-source">{record.source}</span>
+                        </article>
+                    ))}
+                </div>
             </section>
         </main>
     );

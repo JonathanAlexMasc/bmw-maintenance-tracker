@@ -1,0 +1,397 @@
+{
+    "vehicle": {
+        "year": 2006,
+        "make": "BMW",
+        "model": "325i",
+        "series": "3 Series E90",
+        "vin": "WBAVB13546PS65661",
+        "body": "Sedan 4 DR",
+        "engine": "3.0L I6 N52",
+        "fuel": "Gasoline",
+        "drive": "Rear wheel drive",
+        "color": "Green",
+        "currentMileage": 155843,
+        "currentMileageSource": "04/24/2026 Downtown Automotive record",
+        "notes": [
+            "CARFAX reported 155,452 miles on 03/12/2026.",
+            "04/24/2026 Downtown Automotive record shows 155,843 miles.",
+            "05/08/2026 Downtown Automotive record shows 86,271 miles and is flagged as a mileage inconsistency."
+        ]
+    },
+    "maintenanceItems": [
+        {
+            "id": 1,
+            "title": "Engine oil and filter",
+            "category": "Engine",
+            "dueMileage": 162494,
+            "intervalMiles": 7500,
+            "lastDoneMileage": 154994,
+            "lastDoneDate": "2025-08-23",
+            "estimatedCost": 150,
+            "notes": "BMW CBS tracks oil condition; for an older N52, use at least annual oil service even if mileage is low.",
+            "source": "CARFAX oil service plus BMW CBS/Haynes annual oil guidance"
+        },
+        {
+            "id": 2,
+            "title": "Brake fluid flush",
+            "category": "Brakes",
+            "dueMileage": 155843,
+            "intervalMiles": 0,
+            "lastDoneMileage": 153490,
+            "lastDoneDate": "2024-07-09",
+            "estimatedCost": 190,
+            "notes": "BMW lists brake fluid as a CBS item; Haynes recommends renewing brake fluid every 2 years regardless of mileage.",
+            "source": "BMW CBS / Haynes 2-year brake fluid interval"
+        },
+        {
+            "id": 3,
+            "title": "Cabin microfilter",
+            "category": "Comfort",
+            "dueMileage": 155843,
+            "intervalMiles": 15000,
+            "lastDoneMileage": 153490,
+            "lastDoneDate": "2024-07-09",
+            "estimatedCost": 85,
+            "notes": "BMW CBS tracks the microfilter. Last visible CARFAX cabin filter record is July 2024, so this is due by time.",
+            "source": "BMW CBS / CARFAX service history"
+        },
+        {
+            "id": 4,
+            "title": "Air filter element",
+            "category": "Engine",
+            "dueMileage": 155843,
+            "intervalMiles": 30000,
+            "lastDoneMileage": 136201,
+            "lastDoneDate": "2019-06-06",
+            "estimatedCost": 70,
+            "notes": "Haynes includes air filter renewal with Inspection II. No recent CARFAX air-filter record was found.",
+            "source": "Haynes Inspection II guidance / CARFAX gap"
+        },
+        {
+            "id": 5,
+            "title": "Transmission fluid and filter inspection/service",
+            "category": "Drivetrain",
+            "dueMileage": 152834,
+            "intervalMiles": 60000,
+            "lastDoneMileage": 92834,
+            "lastDoneDate": "2015-01-13",
+            "estimatedCost": 650,
+            "notes": "CARFAX shows transmission serviced/internal transmission repaired in 2015. BMW called many fluids lifetime, but this age/mileage merits inspection and likely service.",
+            "source": "CARFAX history plus age-based preventive recommendation"
+        },
+        {
+            "id": 6,
+            "title": "Differential fluid service",
+            "category": "Drivetrain",
+            "dueMileage": 155843,
+            "intervalMiles": 60000,
+            "lastDoneMileage": 0,
+            "lastDoneDate": "Unknown",
+            "estimatedCost": 180,
+            "notes": "No differential service record found. Recommended as catch-up maintenance for a high-mileage E90.",
+            "source": "No CARFAX record found / preventive maintenance"
+        },
+        {
+            "id": 7,
+            "title": "Drive belts and tensioner inspection",
+            "category": "Engine",
+            "dueMileage": 155843,
+            "intervalMiles": 60000,
+            "lastDoneMileage": 117727,
+            "lastDoneDate": "2017-02-27",
+            "estimatedCost": 260,
+            "notes": "Drive belts and tensioner were replaced in 2017. Inspect now due to age and known N52 belt risk.",
+            "source": "CARFAX history / age-based inspection"
+        },
+        {
+            "id": 8,
+            "title": "Coolant service",
+            "category": "Cooling",
+            "dueMileage": 177490,
+            "intervalMiles": 0,
+            "lastDoneMileage": 153490,
+            "lastDoneDate": "2024-07-09",
+            "estimatedCost": 210,
+            "notes": "Haynes recommends coolant every 4 years regardless of mileage; last CARFAX coolant flush was July 2024.",
+            "source": "Haynes 4-year coolant interval / CARFAX"
+        },
+        {
+            "id": 9,
+            "title": "Spark plugs",
+            "category": "Ignition",
+            "dueMileage": 196201,
+            "intervalMiles": 60000,
+            "lastDoneMileage": 136201,
+            "lastDoneDate": "2019-06-06",
+            "estimatedCost": 330,
+            "notes": "Haynes renews spark plugs with Inspection II. Last CARFAX spark-plug service was June 2019.",
+            "source": "Haynes Inspection II / CARFAX"
+        },
+        {
+            "id": 10,
+            "title": "Tire rotation, balance, and pressure check",
+            "category": "Chassis",
+            "dueMileage": 159520,
+            "intervalMiles": 6000,
+            "lastDoneMileage": 153520,
+            "lastDoneDate": "2024-07-18",
+            "estimatedCost": 95,
+            "notes": "Four tires were mounted/balanced with alignment in July 2024; rotate and inspect wear pattern.",
+            "source": "CARFAX tire replacement / common rotation interval"
+        },
+        {
+            "id": 11,
+            "title": "Brake pads, rotors, and lines inspection",
+            "category": "Brakes",
+            "dueMileage": 155843,
+            "intervalMiles": 7500,
+            "lastDoneMileage": 154994,
+            "lastDoneDate": "2025-08-23",
+            "estimatedCost": 0,
+            "notes": "BMW CBS tracks front/rear brakes separately. Inspect pads, rotors, hoses, and lines during the next visit.",
+            "source": "BMW CBS brake tracking"
+        },
+        {
+            "id": 12,
+            "title": "Mileage inconsistency review",
+            "category": "Records",
+            "dueMileage": 155843,
+            "intervalMiles": 0,
+            "lastDoneMileage": 86271,
+            "lastDoneDate": "2026-05-08",
+            "estimatedCost": 0,
+            "notes": "Investigate the 86,271-mile record from 05/08/2026 against the 155k-mile CARFAX/04/24/2026 records before relying on mileage-based projections.",
+            "source": "CARFAX Car Care screenshots"
+        }
+    ],
+    "serviceRecords": [
+        {
+            "id": "2006-04-27-kuni",
+            "date": "2006-04-27",
+            "mileage": 4,
+            "provider": "Kuni BMW",
+            "location": "Beaverton, OR",
+            "services": ["Vehicle serviced", "Pre-delivery inspection completed", "Carpet protection installed", "Floor mats installed"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2006-11-01-kuni",
+            "date": "2006-11-01",
+            "mileage": 5004,
+            "provider": "Kuni BMW",
+            "location": "Beaverton, OR",
+            "services": ["Vehicle serviced", "Brakes checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2008-12-12-bmw-seattle",
+            "date": "2008-12-12",
+            "mileage": 14665,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Vehicle serviced", "Brake fluid flushed/changed", "Cabin air filter replaced/cleaned", "Oil and filter changed", "Wiper(s) replaced"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2010-02-15-bmw-seattle",
+            "date": "2010-02-15",
+            "mileage": 31395,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Oil and filter changed", "Tire condition and pressure checked", "Wiper(s) replaced"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2010-08-24-bmw-seattle",
+            "date": "2010-08-24",
+            "mileage": 39958,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Recommended maintenance performed", "Brake fluid flushed/changed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2014-10-31-bmw-seattle",
+            "date": "2014-10-31",
+            "mileage": 90836,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Brake fluid flushed/changed", "Electrical system checked", "Oil and filter changed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2015-01-13-bmw-seattle",
+            "date": "2015-01-13",
+            "mileage": 92834,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Airbag system checked", "Internal transmission repaired", "Tire condition and pressure checked", "Transmission serviced"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2015-11-04-bmw-seattle",
+            "date": "2015-11-04",
+            "mileage": 103845,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Recommended maintenance performed", "Antifreeze/coolant flushed/changed", "Cabin air filter replaced/cleaned", "Intake silencer serviced", "Oil and filter changed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2016-12-22-damage",
+            "date": "2016-12-22",
+            "mileage": null,
+            "provider": "Damage Report",
+            "location": "Washington",
+            "services": ["Minor damage reported", "Damage to left side"],
+            "source": "CARFAX PDF",
+            "flag": "damage"
+        },
+        {
+            "id": "2017-01-12-bmw-seattle",
+            "date": "2017-01-12",
+            "mileage": 116469,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Tire condition and pressure checked", "Tire(s) replaced", "Two tires balanced", "Two tires mounted"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2017-02-27-bmw-seattle",
+            "date": "2017-02-27",
+            "mileage": 117727,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Blower motor replaced/repaired", "Blower motor resistor replaced", "Drive belt tensioner replaced", "Drive belt(s) replaced", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2018-05-19-bmw-seattle",
+            "date": "2018-05-19",
+            "mileage": 130541,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2018-12-04-bmw-seattle",
+            "date": "2018-12-04",
+            "mileage": 134375,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2019-06-06-bmw-seattle",
+            "date": "2019-06-06",
+            "mileage": 136201,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Intake silencer serviced", "Oil and filter changed", "Spark plug(s) replaced", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2020-10-27-bmw-seattle",
+            "date": "2020-10-27",
+            "mileage": 140957,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Brake fluid flushed/changed", "Oil and filter changed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2021-10-19-bmw-seattle",
+            "date": "2021-10-19",
+            "mileage": 143680,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Electrical system checked", "Oil and filter changed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2022-11-01-bmw-seattle",
+            "date": "2022-11-01",
+            "mileage": 147707,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Brake fluid flushed/changed", "Oil and filter changed", "Power steering checked", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2023-04-29-bmw-seattle",
+            "date": "2023-04-29",
+            "mileage": 149233,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Vehicle serviced"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2024-07-09-bmw-seattle",
+            "date": "2024-07-09",
+            "mileage": 153490,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Antifreeze/coolant flushed/changed", "Brake fluid flushed/changed", "Cabin air filter replaced/cleaned", "Oil and filter changed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2024-07-18-bmw-seattle",
+            "date": "2024-07-18",
+            "mileage": 153520,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Alignment performed", "Engine serviced", "Fluids checked", "Four tires balanced", "Four tires mounted", "Four wheel alignment performed", "Oil and filter changed", "Tire(s) replaced"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2025-08-11-bmw-seattle",
+            "date": "2025-08-11",
+            "mileage": 154945,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Fluids checked", "Oil and filter changed", "Tire condition and pressure checked", "Tire pressure monitoring system checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2025-08-23-bmw-seattle",
+            "date": "2025-08-23",
+            "mileage": 154994,
+            "provider": "BMW Seattle",
+            "location": "Seattle, WA",
+            "services": ["Maintenance inspection completed", "Fluids checked", "Front strut(s) replaced", "Oil and filter changed", "Tire condition and pressure checked"],
+            "source": "CARFAX PDF"
+        },
+        {
+            "id": "2026-04-24-downtown",
+            "date": "2026-04-24",
+            "mileage": 155843,
+            "provider": "Downtown Automotive",
+            "location": "Washington",
+            "services": ["Vehicle serviced", "Maintenance inspection completed", "Battery replaced", "Tire condition and pressure checked"],
+            "source": "IMG_1543.PNG"
+        },
+        {
+            "id": "2026-05-08-downtown",
+            "date": "2026-05-08",
+            "mileage": 86271,
+            "provider": "Downtown Automotive",
+            "location": "Washington",
+            "services": ["Vehicle serviced", "Noise checked", "Power steering checked", "Power steering fluid flushed/changed", "Power steering pump replaced", "Power steering reservoir replaced", "Radiator hose clamp replaced", "Mileage inconsistency"],
+            "source": "IMG_1541.jpg / IMG_1542.PNG",
+            "flag": "mileage_inconsistency"
+        }
+    ],
+    "researchSources": [
+        {
+            "label": "BMW 2006 3 Series Service and Warranty Information",
+            "url": "https://www.autoguidegalaxy.com/2006-bmw-3-series-service-and-warranty-information"
+        },
+        {
+            "label": "Haynes BMW 3-Series routine maintenance guide",
+            "url": "https://uk.haynes.com/blogs/tips-tutorials/bmw-3-series-routine-maintenance-guide-1998-to-2006-petrol-engines"
+        }
+    ]
+}
