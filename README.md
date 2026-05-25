@@ -1,19 +1,21 @@
 # BMW Maintenance Tracker
 
-A web app for tracking maintenance items, upcoming service, and estimated costs for a BMW.
+A Next.js web app for tracking BMW maintenance items, upcoming service, and estimated costs.
 
 ## Project Structure
 
 ```text
-├── backend/        Express API scaffold for future sync/database work
-├── web/            Next.js maintenance dashboard
+├── web/            Next.js app, dashboard, and API routes
 └── package.json    Root workspace configuration
 ```
 
-## Prerequisites
+## Stack
 
-- Node.js 18+
-- npm 9+
+- Next.js App Router
+- React
+- TypeScript
+- Plain CSS
+- Next.js route handlers for API endpoints
 
 ## Getting Started
 
@@ -23,43 +25,52 @@ Install dependencies:
 npm install
 ```
 
-Run the web app:
+Run the app:
 
 ```bash
 npm --workspace=web run dev
 ```
 
-The dashboard will be available at `http://localhost:3000`.
+The app will be available at `http://localhost:3000`.
 
-Run the backend API scaffold:
+## API Routes
 
-```bash
-npm --workspace=backend run dev
+The backend logic now lives inside the Next.js app:
+
+```text
+GET  /api/health
+GET  /api/v1/status
+GET  /api/v1/garage
+GET  /api/v1/maintenance-items
+POST /api/v1/maintenance-items
 ```
-
-The API will be available at `http://localhost:3001`.
 
 ## Current Data Model
 
-The deployed web app currently stores maintenance items in browser `localStorage`, so it works without a hosted database. The backend contains seed endpoints for a future sync layer, but it is not required by the current web dashboard.
+The dashboard stores user edits in browser `localStorage` for now. The API routes provide seed data and a future sync surface, but they do not yet persist to a hosted database.
 
 ## Useful Commands
 
 ```bash
 npm run build
 npm --workspace=web run build
-npm --workspace=backend run build
 ```
 
-## Deployment
+## Deploy On Vercel
 
-The web app is deployed on Vercel:
+Import the repo in Vercel and use:
 
-https://web-sand-delta-38.vercel.app
+```text
+Framework Preset: Next.js
+Root Directory: web
+Build Command: npm run build
+Output Directory: .next
+Install Command: npm install
+```
 
-To deploy again:
+Or deploy from the CLI:
 
 ```bash
 cd web
-vercel deploy --prod
+vercel --prod
 ```
